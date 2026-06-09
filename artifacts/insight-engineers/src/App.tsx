@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { BrainCircuit, Database, Cpu, Network, Terminal, Code2, Server, BookOpen, MessageSquare, ArrowRight, Github } from "lucide-react";
-import NotFound from "@/pages/not-found";
 
-const queryClient = new QueryClient();
-
-const DISCORD_LINK = "https://discord.gg/your-invite";
+const SITE_NAME = import.meta.env.VITE_SITE_NAME ?? "Insight Engineers";
+const SITE_TAGLINE =
+  import.meta.env.VITE_SITE_TAGLINE ?? "Subtle Thought But Meaningful.";
+const DISCORD_LINK =
+  import.meta.env.VITE_DISCORD_URL ?? "https://discord.gg/8596J4bQ";
+const TERMS_LINK = import.meta.env.VITE_TERMS_URL ?? "#";
+const PRIVACY_LINK = import.meta.env.VITE_PRIVACY_URL ?? "#";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -27,7 +26,7 @@ function Navbar() {
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Terminal className="w-5 h-5 text-primary" />
-          <span className="font-mono font-semibold tracking-tight text-foreground">Insight Engineers</span>
+          <span className="font-mono font-semibold tracking-tight text-foreground">{SITE_NAME}</span>
         </div>
         <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
           <a href="#about" className="hover:text-foreground transition-colors">About</a>
@@ -66,11 +65,11 @@ function Hero() {
           </div>
           
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground mb-6">
-            Insight Engineers
+            {SITE_NAME}
           </h1>
           
           <p className="text-xl md:text-2xl font-mono text-muted-foreground mb-12 tracking-tight">
-            Subtle Thought But Meaningful.
+            {SITE_TAGLINE}
           </p>
           
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
@@ -275,21 +274,21 @@ function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
             <Terminal className="w-5 h-5 text-primary" />
-            <span className="font-mono font-semibold tracking-tight">Insight Engineers</span>
+            <span className="font-mono font-semibold tracking-tight">{SITE_NAME}</span>
           </div>
           
           <div className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Insight Engineers. Subtle Thought But Meaningful.
+            &copy; {new Date().getFullYear()} {SITE_NAME}. {SITE_TAGLINE}
           </div>
           
           <div className="flex gap-4">
             <a href={DISCORD_LINK} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
               Discord
             </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+            <a href={TERMS_LINK} className="text-muted-foreground hover:text-foreground transition-colors">
               Terms
             </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+            <a href={PRIVACY_LINK} className="text-muted-foreground hover:text-foreground transition-colors">
               Privacy
             </a>
           </div>
@@ -313,29 +312,13 @@ function Home() {
   );
 }
 
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
-
 function App() {
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <Home />
   );
 }
 
